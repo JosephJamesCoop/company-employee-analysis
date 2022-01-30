@@ -88,7 +88,7 @@ const DB = {
       {
       type: 'input',
       name: 'name',
-      message: 'Please select a Name for the new Department',
+      message: 'Please select a Name for the new Department: ',
     }
   ]).then(
   department => {
@@ -109,20 +109,32 @@ const name = department.name;
     inquirer.prompt([
       {
       type: 'input',
-      name: 'name',
-      message: 'Please select a name for the new role',
-    }
+      name: 'title',
+      message: 'Please select a title for the new role: ',
+    },
+    {
+      type: 'input',
+      name: 'salary',
+      message: 'Please select a salary for the new role: (no $ or , ) ',
+    },
+    {
+      type: 'input',
+      name: 'deptId',
+      message: 'Please select a department ID for the new role: ',
+    },
   ]).then(
   role => {
-const added = role.name;
+const title = role.title;
+const salary = role.salary;
+const deptId = role.deptId
     const sql = `INSERT INTO role (title, salary, department_id)
   VALUES (?, ?, ?)`;
-  const params = [added];
+  const params = [title, salary, deptId];
   db.query(sql, params, (err, rows) => {
     if (err) throw err;
-    console.log(`Added ${added} to Role`);
+    console.log(`Added ${title, salary, deptId} to Role`);
   }) 
-  DB.ViewAllDepartments();
+  DB.ViewAllRoles();
 }) 
   },
   AddAnEmployee() {
