@@ -3,7 +3,8 @@ const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
 const mysql = require('mysql2');
-const DB = require("./routes/apiRoutes/roles.js");
+// const DB = require("./routes/apiRoutes/roles.js");
+// const db = require('./db/connection');
 
 
 // const db = require('./db/connection');
@@ -48,12 +49,117 @@ const userPrompts = {
   }
 };
 
+
+
+const DB = {
+  ViewAllDepartments() {
+    console.log('View All Departments');
+    const sql = `SELECT * FROM departments`; 
+    db.query(sql, (err, rows) => {
+      if (err) throw err;
+      console.table(rows);
+    })
+    application();
+  },
+
+  ViewAllRoles() {
+    console.log('View All Roles');
+    const sql = `SELECT * FROM role`; 
+    db.query(sql, (err, rows) => {
+      if (err) throw err;
+      console.table(rows);
+    });
+    application();
+  },
+
+  ViewAllEmployees() {
+    console.log('View All Employees');
+    const sql = `SELECT * FROM employee`; 
+    db.query(sql, (err, rows) => {
+      if (err) throw err;
+      console.table(rows);
+    });
+    application();
+  },
+  
+  AddADepartment() {
+    console.log('Add A Departments');
+  inquirer.prompt([
+      {
+      type: 'input',
+      name: 'name',
+      message: 'Please select a Name for the new Department',
+    }
+  ]).then(
+  department => {
+const name = department.name;
+    const sql = `INSERT INTO departments (department)
+  VALUES (?)`;
+  const params = [name];
+  db.query(sql, params, (err, rows) => {
+    if (err) throw err;
+    console.log(`Added ${name} to Departments`);
+  }) 
+  DB.ViewAllDepartments();
+}) 
+},
+
+  AddARole() {
+    console.log('Add A Role');
+    inquirer.prompt([
+      {
+      type: 'input',
+      name: 'name',
+      message: 'Please select a name for the new role',
+    }
+  ]).then(
+  role => {
+const added = role.name;
+    const sql = `INSERT INTO role (title, salary, department_id)
+  VALUES (?, ?, ?)`;
+  const params = [added];
+  db.query(sql, params, (err, rows) => {
+    if (err) throw err;
+    console.log(`Added ${added} to Role`);
+  }) 
+  DB.ViewAllDepartments();
+}) 
+  },
+  AddAnEmployee() {
+    console.log('Add An Employee');
+
+
+    const sql = `INSERT INTO candidates (first_name, last_name, industry_connected)
+    VALUES (?,?,?)`;
+    const params = [body.first_name, body.last_name, body.industry_connected];
+    db.query(sql, params, (err, rows) => {
+      if (err) throw err;
+      console.table(rows);
+    });
+  },
+  UpdateAnEmployeeRole() {
+    console.log('Update An Employee Role');
+
+
+    
+  }, Quit() {
+    console.log('You selected Quit');
+  },
+};
+
+
+
+
+
+
+
+
+
 // third file
 async function application() {
   const { menuChoice } = await userPrompts.promptHomeMenu();
   if (menuChoice === 'Quit') return console.log('Goodbye!');
   DB[menuChoice.split(' ').join('')]();
-  application();
 };
 
 // Start server after DB connection
@@ -66,6 +172,3 @@ db.connect(err => {
 });
 
 application();
-
-
-// module.exports = application()
