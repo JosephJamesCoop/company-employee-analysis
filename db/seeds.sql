@@ -1,4 +1,4 @@
-INSERT INTO department (area)
+INSERT INTO departments (department)
 VALUES
   ('Clothing'),
   ('Furniture'),
